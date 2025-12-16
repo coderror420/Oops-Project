@@ -1,9 +1,10 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
+#include <iostream>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
+    , ui(new Ui::MainWindow), isTimerActive(false)
 {
     ui->setupUi(this);
     ui->stackedWidget->setCurrentIndex(0);
@@ -83,5 +84,34 @@ void MainWindow::goBack()
     ui->stackedWidget->setCurrentIndex(index - 1);
 }
 
+
+void MainWindow::on_verify_clicked()
+{
+    if(isTimerActive) {
+        isTimerActive = false;
+        qint64 elapsed = otpTimer.elapsed();
+        double seconds = elapsed / 1000.0;
+
+        //ui->statusOtp->setText(QString("%1 seconds").arg(seconds, 0, 'f', 2));
+        std::cout<<seconds;
+        // Store it in your transaction object here
+        // transaction.getBehavioralData().setOTPResponseTime(seconds);
+
+        //Re-enable generate button
+        ui->next_3->setEnabled(true);
+        ui->verify->setEnabled(false);
+    }
+}
+
+
+void MainWindow::on_next_3_clicked()
+{
+    otpTimer.start();
+    isTimerActive = true;
+
+    //Disable button to prevent multiple clicks
+    ui->next_3->setEnabled(false);
+    ui->verify->setEnabled(true);
+}
 
 
