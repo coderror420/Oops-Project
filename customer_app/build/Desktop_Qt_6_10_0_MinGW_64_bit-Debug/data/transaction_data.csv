@@ -1,0 +1,2 @@
+transaction_amount,transaction_type,account_balance,timestamp,hour,day,month,day_of_week,device_type,ip_address_flag,merchant_category,transaction_distance,authentication_method,daily_transaction_count,avg_transaction_amount_7d,failed_transaction_count_7d
+550,Transfer,45000,1765974194,17,17,12,3,Laptop,0,Clothing,12.5,OTP,3,980,1

@@ -1,0 +1,9 @@
+D:/oopsproject/customer_app/build/Desktop_Qt_6_10_0_MinGW_64_bit-Debug/CMakeFiles/CustomerApp.dir
+D:/oopsproject/customer_app/build/Desktop_Qt_6_10_0_MinGW_64_bit-Debug/CMakeFiles/edit_cache.dir
+D:/oopsproject/customer_app/build/Desktop_Qt_6_10_0_MinGW_64_bit-Debug/CMakeFiles/rebuild_cache.dir
+D:/oopsproject/customer_app/build/Desktop_Qt_6_10_0_MinGW_64_bit-Debug/CMakeFiles/list_install_components.dir
+D:/oopsproject/customer_app/build/Desktop_Qt_6_10_0_MinGW_64_bit-Debug/CMakeFiles/install.dir
+D:/oopsproject/customer_app/build/Desktop_Qt_6_10_0_MinGW_64_bit-Debug/CMakeFiles/install/local.dir
+D:/oopsproject/customer_app/build/Desktop_Qt_6_10_0_MinGW_64_bit-Debug/CMakeFiles/install/strip.dir
+D:/oopsproject/customer_app/build/Desktop_Qt_6_10_0_MinGW_64_bit-Debug/CMakeFiles/CustomerApp_autogen_timestamp_deps.dir
+D:/oopsproject/customer_app/build/Desktop_Qt_6_10_0_MinGW_64_bit-Debug/CMakeFiles/CustomerApp_autogen.dir

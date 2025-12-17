@@ -8,6 +8,7 @@
 #include "FraudDetector.h"
 #include "BiometricSnapshot.h"
 #include "BiometricCSVLogger.h"
+#include "transactioncsvlogger.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -115,63 +116,81 @@ void MainWindow::goNext(){
     if(index+1 == ui->stackedWidget->count()-1){
         if(isverified()){
 
-            // 1. Create the Umbrella Class (Snapshot)
+            // ================= BIOMETRIC SNAPSHOT =================
             BiometricSnapshot snapshot;
             snapshot.userId = userId.toStdString();
             snapshot.sessionId = "SESSION_" + std::to_string(std::time(nullptr));
             snapshot.timestamp = std::time(nullptr);
 
-            // 2. Fill OTP Data
             snapshot.otpResponseTime = lastOtpTime;
             snapshot.otpAttemptsCount = otpAttempts;
-            snapshot.totalOtpsSent = 1; // Assuming 1 for this flow
+            snapshot.totalOtpsSent = 1;
 
-            // 3. Fill Transaction Data
             snapshot.currentAmount = amount;
-            snapshot.currentMerchant = recipientId.toStdString(); // Using recipient as merchant
+            snapshot.currentMerchant = recipientId.toStdString();
             snapshot.currentCategory = "Transfer";
             snapshot.currentHourOfDay = QTime::currentTime().hour();
             snapshot.isWeekend = (QDate::currentDate().dayOfWeek() >= 6);
 
-            // 4. Fill History (Mocked for now)
             snapshot.lastTxn1 = getLastTransaction(0);
             snapshot.lastTxn2 = getLastTransaction(1);
             snapshot.lastTxn3 = getLastTransaction(2);
 
-            // 5. Calculate Derived Features
             snapshot.populateMockKeystrokeData();
             snapshot.calculateDerivedFeatures();
 
-            // 6. Run Fraud Detection
             double fraudScore = fraudDetector->detectFraud(snapshot);
 
-            // 7. Log to CSV (Crucial for future training)
             BiometricCSVLogger::saveSnapshot(snapshot);
 
-            // 8. Display Result based on Fraud Score
+            // ================= TRANSACTION OBJECT =================
+            Transaction txn(
+                amount,                                 // transactionAmount
+                "Transfer",                             // transactionType
+                45000.0,                                // accountBalance (mock / replace later)
+                QDateTime::currentDateTime(),           // timestamp
+                "Laptop",                               // deviceType
+                false,                                  // ipAddressFlag
+                "Clothing",                              // merchantCategory
+                12.5,                                   // transactionDistance (mock)
+                "OTP",                                  // authenticationMethod
+                3,                                      // dailyTransactionCount (mock)
+                980.0,                                  // avgTransactionAmount7d (mock)
+                otpAttempts                             // failedTransactionCount7d
+                );
+
+            TransactionCSVLogger::saveTransaction(txn);
+
+            // ================= UI RESULT =================
             if(snapshot.isFlagged) {
-                // FRAUD CASE
-                ui->paymentSuccess->setText("⚠️ TRANSACTION FLAGGED\n\n"
-                                            "Reason: Unusual Behavior Detected\n"
-                                            "Fraud Score: " + QString::number(fraudScore));
+                ui->paymentSuccess->setText(
+                    "⚠️ TRANSACTION FLAGGED\n\n"
+                    "Reason: Unusual Behavior Detected\n"
+                    "Fraud Score: " + QString::number(fraudScore)
+                    );
                 ui->paymentSuccess->setStyleSheet("color: red; font-weight: bold;");
             } else {
-                // SUCCESS CASE
-                ui->paymentSuccess->setText("Payment successful!\n\n"
-                                            "User: " + userId +
-                                            "\nAmount: " + QString::number(amount) +
-                                            "\nReceiver: " + recipientId +
-                                            "\nRisk Score: " + QString::number(fraudScore) + " (Safe)");
+                ui->paymentSuccess->setText(
+                    "Payment successful!\n\n"
+                    "User: " + userId +
+                    "\nAmount: " + QString::number(amount) +
+                    "\nReceiver: " + recipientId +
+                    "\nRisk Score: " + QString::number(fraudScore) + " (Safe)"
+                    );
                 ui->paymentSuccess->setStyleSheet("color: white;");
             }
         }
     }
+
 }
 
 void MainWindow::goBack()
 {
     int index = ui->stackedWidget->currentIndex();
     ui->stackedWidget->setCurrentIndex(index - 1);
+}
+void MainWindow::on_getOtp_clicked(){
+
 }
 
 void MainWindow::on_verify_clicked()

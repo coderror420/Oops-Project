@@ -25,6 +25,9 @@ set(PROJECT_SOURCES
         BiometricCSVLogger.cpp
         FraudDetector.h
         FraudDetector.cpp
+
+
+        TransactionCSVLogger.h
 )
 
 # --- 2. BUILD THE EXECUTABLE ---
@@ -32,6 +35,11 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(CustomerApp
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
+
+        TransactionCSVLogger.h
+        transaction.h transaction.cpp
+        transactioncsvlogger.h transactioncsvlogger.cpp
+
         # Do not list files here again, they are already in PROJECT_SOURCES
     )
 else()

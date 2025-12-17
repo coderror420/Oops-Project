@@ -1,0 +1,21 @@
+# ninja log v6
+1464	6995	7876745053863138	CMakeFiles/CustomerApp.dir/FraudDetector.cpp.obj	d7ede795b8b2e0d5
+14	171	7876746040283661	CustomerApp_autogen/timestamp	9d127bc6dccd9899
+14	171	7876746040283661	D:/oopsproject/customer_app/build/Desktop_Qt_6_10_0_MinGW_64_bit-Debug/CustomerApp_autogen/mocs_compilation.cpp	9d127bc6dccd9899
+14	171	7876746040283661	CustomerApp_autogen/mocs_compilation.cpp	9d127bc6dccd9899
+1458	6816	7876745053804358	CMakeFiles/CustomerApp.dir/BiometricCSVLogger.cpp.obj	42e9e9a035657cbf
+14	171	7876746040283661	D:/oopsproject/customer_app/build/Desktop_Qt_6_10_0_MinGW_64_bit-Debug/CustomerApp_autogen/timestamp	9d127bc6dccd9899
+1451	2783	7876745053722893	CMakeFiles/CustomerApp.dir/BiometricSnapshot.cpp.obj	858803b314e46414
+1470	6451	7876745053923550	CMakeFiles/CustomerApp.dir/transaction.cpp.obj	288e67a4a3b8cdc8
+1435	7236	7876745053585870	CMakeFiles/CustomerApp.dir/main.cpp.obj	f250f7fe695bb36
+1427	7247	7876745053477521	CMakeFiles/CustomerApp.dir/CustomerApp_autogen/mocs_compilation.cpp.obj	396d3a0e00e9632
+172	3531	7876746041868503	CMakeFiles/CustomerApp.dir/mainwindow.cpp.obj	f3a64708045cd847
+3531	3893	7876746075446616	CustomerApp.exe	f4f77a86e688f591
+37	251	7876773559878970	CustomerApp_autogen/timestamp	9d127bc6dccd9899
+37	251	7876773559878970	CustomerApp_autogen/mocs_compilation.cpp	9d127bc6dccd9899
+37	251	7876773559878970	D:/oopsproject/customer_app/build/Desktop_Qt_6_10_0_MinGW_64_bit-Debug/CustomerApp_autogen/timestamp	9d127bc6dccd9899
+37	251	7876773559878970	D:/oopsproject/customer_app/build/Desktop_Qt_6_10_0_MinGW_64_bit-Debug/CustomerApp_autogen/mocs_compilation.cpp	9d127bc6dccd9899
+259	4116	7876773562098807	CMakeFiles/CustomerApp.dir/transaction.cpp.obj	288e67a4a3b8cdc8
+264	4408	7876773562148779	CMakeFiles/CustomerApp.dir/transactioncsvlogger.cpp.obj	f69440dd02f7d4d1
+252	5460	7876773562023521	CMakeFiles/CustomerApp.dir/mainwindow.cpp.obj	f3a64708045cd847
+5460	6045	7876773614078145	CustomerApp.exe	ead8b7247d2ec7d4

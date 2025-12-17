@@ -1,7 +1,0 @@
-user_id,session_id,timestamp,avg_dwell_time,std_dwell_time,avg_flight_time,std_flight_time,typing_speed,backspace_rate,pause_count,otp_response_time,otp_attempts_count,total_otps_sent,current_amount,current_merchant,current_category,current_hour_of_day,is_weekend,last_txn1_id,last_txn1_amount,last_txn1_merchant,last_txn1_category,last_txn2_id,last_txn2_amount,last_txn2_merchant,last_txn2_category,last_txn3_id,last_txn3_amount,last_txn3_merchant,last_txn3_category,amount_vs_avg_last3,time_since_last_txn,merchant_seen_before,device_id,is_known_device,geo_distance_km,fraud_score,is_flagged,flag_reason
-mannan,SESSION_1765965808,1765965808,0,0,0,0,0,0,0,0,7,1,100,kanishka,Transfer,15,0,,50,Amazon,,,60,Amazon,,,70,Amazon,,1.66639,0,0,,1,0,0,0,
-mannan,SESSION_1765966355,1765966355,0,0,0,0,0,0,0,0,1,1,100,kanishka,Transfer,15,0,,50,Amazon,,,60,Amazon,,,70,Amazon,,1.66639,0,0,,1,0,0,0,
-mannan,SESSION_1765967247,1765967247,0,0,0,0,0,0,0,0,1,1,100,kanishka,Transfer,15,0,,50,Amazon,,,60,Amazon,,,70,Amazon,,1.66639,0,0,,1,0,0,0,
-mannan,SESSION_1765967610,1765967610,0,0,0,0,0,0,0,0,1,1,100,kanishka,Transfer,16,0,,50,Amazon,,,60,Amazon,,,70,Amazon,,1.66639,0,0,,1,0,0,0,
-mannan,SESSION_1765967915,1765967915,0,0,0,0,0,0,0,0,1,1,100,kanishka,Transfer,16,0,,50,Amazon,,,60,Amazon,,,70,Amazon,,1.66639,0,0,,1,0,0,0,
-mannan,SESSION_1765968410,1765968410,119,24,67,17,8.5,5,1,0,1,1,100,kanishka,Transfer,16,0,,50,Amazon,,,60,Amazon,,,70,Amazon,,1.66639,0,0,,1,0,0,0,
