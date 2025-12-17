@@ -54,6 +54,84 @@ TransactionRecord MainWindow::getLastTransaction(int index) {
     return rec;
 }
 
+std::vector<TransactionRecord> MainWindow::getLastThreeTransactions(const QString& userId) {
+    std::vector<TransactionRecord> transactions;
+
+    QFile file("data/transaction_data.csv");
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qWarning() << "Cannot open transaction_data.csv";
+        // Return empty vector - will use defaults
+        return transactions;
+    }
+
+    QTextStream in(&file);
+    QString header = in.readLine(); // Skip header
+
+    // Read all transactions for this user
+    std::vector<TransactionRecord> userTransactions;
+
+    while (!in.atEnd()) {
+        QString line = in.readLine();
+        TransactionRecord record = parseTransactionLine(line);
+
+        // Only keep transactions for this user
+        if (QString::fromStdString(record.userId) == userId) {
+            userTransactions.push_back(record);
+        }
+    }
+
+    file.close();
+
+    // Get last 3 transactions (most recent)
+    int count = userTransactions.size();
+    if (count >= 3) {
+        transactions.push_back(userTransactions[count - 1]); // Most recent
+        transactions.push_back(userTransactions[count - 2]);
+        transactions.push_back(userTransactions[count - 3]);
+    } else if (count == 2) {
+        transactions.push_back(userTransactions[count - 1]);
+        transactions.push_back(userTransactions[count - 2]);
+        transactions.push_back(TransactionRecord()); // Empty
+    } else if (count == 1) {
+        transactions.push_back(userTransactions[count - 1]);
+        transactions.push_back(TransactionRecord());
+        transactions.push_back(TransactionRecord());
+    } else {
+        // No history - return 3 empty records
+        transactions.push_back(TransactionRecord());
+        transactions.push_back(TransactionRecord());
+        transactions.push_back(TransactionRecord());
+    }
+
+    qDebug() << "Loaded" << transactions.size() << "transaction history records for user" << userId;
+
+    return transactions;
+}
+
+TransactionRecord MainWindow::parseTransactionLine(const QString& line) {
+    TransactionRecord record;
+
+    QStringList fields = line.split(',');
+
+    if (fields.size() < 10) {
+        qWarning() << "Invalid CSV line:" << line;
+        return record;
+    }
+
+    // Parse based on your CSV format
+    // Adjust indices based on your actual CSV column order
+
+    record.transactionId = fields[0].toStdString();  // Transaction_ID
+    record.userId = fields[1].toStdString();         // User_ID
+    record.amount = fields[2].toDouble();            // Transaction_Amount
+    record.merchant = fields[7].toStdString();       // Merchant (or use appropriate field)
+    record.category = fields[8].toStdString();       // Category
+    record.timestamp = fields[4].toStdString();      // Timestamp
+    record.hourOfDay = fields[15].toInt();           // Hour (if available)
+
+    return record;
+}
+
 void MainWindow::goNext(){
     int count = (ui->stackedWidget->count())-1;
     int index = ui->stackedWidget->currentIndex();
@@ -133,9 +211,25 @@ void MainWindow::goNext(){
             snapshot.currentCategory = "Transfer";
             snapshot.currentHourOfDay = QTime::currentTime().hour();
 
-            snapshot.lastTxn1 = getLastTransaction(0);
-            snapshot.lastTxn2 = getLastTransaction(1);
-            snapshot.lastTxn3 = getLastTransaction(2);
+            std::vector<TransactionRecord> lastTransactions = getLastThreeTransactions(userId);
+
+            if (lastTransactions.size() >= 3) {
+                snapshot.lastTxn1 = lastTransactions[0];
+                snapshot.lastTxn2 = lastTransactions[1];
+                snapshot.lastTxn3 = lastTransactions[2];
+            } else {
+                // If not enough history, use empty records
+                if (lastTransactions.size() >= 1) snapshot.lastTxn1 = lastTransactions[0];
+                if (lastTransactions.size() >= 2) snapshot.lastTxn2 = lastTransactions[1];
+            }
+
+            qDebug() << "Last 3 transactions loaded:";
+            if (snapshot.lastTxn1.amount > 0)
+                qDebug() << "  Txn1:" << snapshot.lastTxn1.amount << QString::fromStdString(snapshot.lastTxn1.merchant);
+            if (snapshot.lastTxn2.amount > 0)
+                qDebug() << "  Txn2:" << snapshot.lastTxn2.amount << QString::fromStdString(snapshot.lastTxn2.merchant);
+            if (snapshot.lastTxn3.amount > 0)
+                qDebug() << "  Txn3:" << snapshot.lastTxn3.amount << QString::fromStdString(snapshot.lastTxn3.merchant);
 
             snapshot.populateMockKeystrokeData();
             snapshot.calculateDerivedFeatures();

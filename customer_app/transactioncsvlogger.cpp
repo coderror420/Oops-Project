@@ -74,7 +74,8 @@ bool TransactionCSVLogger::saveTransaction(
             << "Hour,"
             << "Day,"
             << "Month,"
-            << "DayOfWeek,";
+            << "DayOfWeek"
+            << "\n";
         stream.flush();
     }
 

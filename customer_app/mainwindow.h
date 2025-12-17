@@ -44,5 +44,8 @@ private:
 
     // Helper to get mock history
     TransactionRecord getLastTransaction(int index);
+    //Real history
+    std::vector<TransactionRecord> getLastThreeTransactions(const QString& userId);
+    TransactionRecord parseTransactionLine(const QString& line);
 };
 #endif // MAINWINDOW_H

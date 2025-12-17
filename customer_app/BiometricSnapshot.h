@@ -8,13 +8,14 @@
 // Single transaction record
 struct TransactionRecord {
     std::string transactionId;
+    std::string userId;        // ADD THIS if missing
     double amount;
     std::string merchant;
     std::string category;
     std::string timestamp;
     int hourOfDay;
 
-    TransactionRecord() : transactionId(""), amount(0.0),
+    TransactionRecord() : transactionId(""), userId(""), amount(0.0),
         merchant(""), category(""),
         timestamp(""), hourOfDay(0) {}
 };
