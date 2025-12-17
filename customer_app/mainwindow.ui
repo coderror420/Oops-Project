@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>2</number>
     </property>
     <widget class="QWidget" name="pageUser">
      <property name="autoFillBackground">
@@ -49,7 +49,7 @@
         <x>60</x>
         <y>50</y>
         <width>161</width>
-        <height>56</height>
+        <height>65</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout">
@@ -116,8 +116,8 @@
        <rect>
         <x>50</x>
         <y>40</y>
-        <width>171</width>
-        <height>57</height>
+        <width>205</width>
+        <height>66</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_2">
@@ -184,8 +184,8 @@
        <rect>
         <x>51</x>
         <y>40</y>
-        <width>171</width>
-        <height>56</height>
+        <width>174</width>
+        <height>66</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_3">

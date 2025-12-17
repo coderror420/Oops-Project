@@ -2,6 +2,9 @@
 #define MAINWINDOW_H
 #include <QElapsedTimer>
 #include <QMainWindow>
+#include "FraudDetector.h"
+#include "BiometricSnapshot.h"
+#include "BiometricCSVLogger.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -35,5 +38,11 @@ private:
     QString otp;
     QElapsedTimer otpTimer;
     bool isTimerActive;
+    FraudDetector* fraudDetector;
+    double lastOtpTime;
+    int otpAttempts;
+
+    // Helper to get mock history
+    TransactionRecord getLastTransaction(int index);
 };
 #endif // MAINWINDOW_H
