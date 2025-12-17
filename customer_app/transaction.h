@@ -7,76 +7,76 @@
 class Transaction
 {
 private:
-    // ---------- Data Members ----------
+    QString m_transactionId;
+    QString m_userId;
+
     double m_transactionAmount;
     QString m_transactionType;
+    QDateTime m_timestamp;
     double m_accountBalance;
 
-    QDateTime m_timestamp;
-    int m_month;
-    int m_hour;
-    int m_day;
-    int m_dayOfWeek;
-
-    // int m_previousFraudulentActivity; add in user
-
     QString m_deviceType;
-    // QString Location; ehh idk
-    bool m_ipAddressFlag;
-
     QString m_merchantCategory;
-    double m_transactionDistance;
-
-    QString m_authenticationMethod;
+    QString m_location;
+    bool m_ipAddressFlag;
 
     int m_dailyTransactionCount;
     double m_avgTransactionAmount7d;
     int m_failedTransactionCount7d;
+
+    double m_transactionDistance;
+    QString m_authenticationMethod;
+
+    // Derived
+    int m_hour;
+    int m_day;
+    int m_month;
+    int m_dayOfWeek;
+    bool m_isWeekend;
+
 public:
-    // ---------- Constructors ----------
     Transaction();
-    Transaction(double amount,
-                const QString &transactionType,
+
+    Transaction(const QString& transactionId,
+                const QString& userId,
+                double amount,
+                const QString& transactionType,
+                const QDateTime& timestamp,
                 double accountBalance,
-                const QDateTime &timestamp,
-                const QString &deviceType,
+                const QString& deviceType,
+                const QString& location,
                 bool ipAddressFlag,
-                const QString &merchantCategory,
+                const QString& merchantCategory,
                 double transactionDistance,
-                const QString &authenticationMethod,
+                const QString& authenticationMethod,
                 int dailyTransactionCount,
                 double avgTransactionAmount7d,
                 int failedTransactionCount7d);
 
-    // ---------- Getters ----------
+    // Getters (DATASET ORDER)
+    QString transactionId() const;
+    QString userId() const;
     double transactionAmount() const;
     QString transactionType() const;
-    double accountBalance() const;
     QDateTime timestamp() const;
+    double accountBalance() const;
+    QString deviceType() const;
+    QString location() const;
+    QString merchantCategory() const;
+    bool ipAddressFlag() const;
+    int dailyTransactionCount() const;
+    double avgTransactionAmount7d() const;
+    int failedTransactionCount7d() const;
+    double transactionDistance() const;
+    QString authenticationMethod() const;
+
     int hour() const;
     int day() const;
     int month() const;
     int dayOfWeek() const;
-    QString deviceType() const;
-    bool ipAddressFlag() const;
-    QString merchantCategory() const;
-    double transactionDistance() const;
-    QString authenticationMethod() const;
-    int dailyTransactionCount() const;
-    double avgTransactionAmount7d() const;
-    int failedTransactionCount7d() const;
+    bool isWeekend() const;
 
-    // ---------- Utility Functions ----------
     void deriveTimeFeatures();
-    bool isHighValue(double threshold) const;
-    bool isGeoAnomalous(double distanceThreshold) const;
-    bool hasRecentFailures(int failureThreshold) const;
-    bool isRiskyTime() const;
-
-    // ---------- ML Integration ----------
-    QString toJson() const;
-
-
 };
 
-#endif // TRANSACTION_H
+#endif

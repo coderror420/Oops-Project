@@ -1,6 +1,7 @@
 D:/oopsproject/customer_app/build/Desktop_Qt_6_10_0_MinGW_64_bit-Debug/CustomerApp_autogen/EWIEGA46WW/moc_mainwindow.cpp: D:/oopsproject/customer_app/mainwindow.h \
   D:/oopsproject/customer_app/build/Desktop_Qt_6_10_0_MinGW_64_bit-Debug/CustomerApp_autogen/moc_predefs.h \
   C:/Qt/6.10.0/mingw_64/include/QtCore/QCoreApplication \
+  C:/Qt/6.10.0/mingw_64/include/QtCore/QDateTime \
   C:/Qt/6.10.0/mingw_64/include/QtCore/QDir \
   C:/Qt/6.10.0/mingw_64/include/QtCore/QElapsedTimer \
   C:/Qt/6.10.0/mingw_64/include/QtCore/QFileInfo \
@@ -434,4 +435,6 @@ D:/oopsproject/customer_app/build/Desktop_Qt_6_10_0_MinGW_64_bit-Debug/CustomerA
   C:/Qt/Tools/mingw1310_64/x86_64-w64-mingw32/include/wctype.h \
   D:/oopsproject/customer_app/BiometricCSVLogger.h \
   D:/oopsproject/customer_app/BiometricSnapshot.h \
-  D:/oopsproject/customer_app/FraudDetector.h
+  D:/oopsproject/customer_app/FraudDetector.h \
+  D:/oopsproject/customer_app/transaction.h \
+  D:/oopsproject/customer_app/transactioncsvlogger.h

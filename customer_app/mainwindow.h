@@ -5,7 +5,7 @@
 #include "FraudDetector.h"
 #include "BiometricSnapshot.h"
 #include "BiometricCSVLogger.h"
-
+#include "transactioncsvlogger.h"
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;

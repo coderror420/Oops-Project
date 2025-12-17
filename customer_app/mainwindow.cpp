@@ -8,6 +8,7 @@
 #include "FraudDetector.h"
 #include "BiometricSnapshot.h"
 #include "BiometricCSVLogger.h"
+#include "transaction.h"
 #include "transactioncsvlogger.h"
 
 MainWindow::MainWindow(QWidget *parent)
@@ -145,18 +146,21 @@ void MainWindow::goNext(){
 
             // ================= TRANSACTION OBJECT =================
             Transaction txn(
-                amount,                                 // transactionAmount
-                "Transfer",                             // transactionType
-                45000.0,                                // accountBalance (mock / replace later)
-                QDateTime::currentDateTime(),           // timestamp
-                "Laptop",                               // deviceType
-                false,                                  // ipAddressFlag
-                "Clothing",                              // merchantCategory
-                12.5,                                   // transactionDistance (mock)
-                "OTP",                                  // authenticationMethod
-                3,                                      // dailyTransactionCount (mock)
-                980.0,                                  // avgTransactionAmount7d (mock)
-                otpAttempts                             // failedTransactionCount7d
+                "TXN_" + QString::number(std::time(nullptr)),   // Transaction_ID
+                userId,                                         // User_ID
+                amount,                                         // Transaction_Amount
+                "TRANSFER",                                     // Transaction_Type
+                QDateTime::currentDateTime(),                   // Timestamp
+                10000.0,                                        // Account_Balance (mock)
+                "Laptop",                                       // Device_Type
+                "Mumbai",                                       //location
+                false,                                          // IP_Address_Flag
+                "Transfer",                                    // Merchant_Category
+                5.0,                                            // Transaction_Distance (km)
+                "OTP",                                          // Authentication_Method
+                3,                                              // Daily_Transaction_Count
+                1200.0,                                         // Avg_Transaction_Amount_7d
+                0                                                // Failed_Transaction_Count_7d
                 );
 
             TransactionCSVLogger::saveTransaction(txn);
@@ -181,7 +185,6 @@ void MainWindow::goNext(){
             }
         }
     }
-
 }
 
 void MainWindow::goBack()

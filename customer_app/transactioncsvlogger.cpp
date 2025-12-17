@@ -6,6 +6,7 @@
 #include <QTextStream>
 #include <QCoreApplication>
 #include <QDebug>
+#include <QDateTime>
 
 bool TransactionCSVLogger::fileExists(const std::string& filename)
 {
@@ -16,7 +17,7 @@ bool TransactionCSVLogger::saveTransaction(
     const Transaction& txn,
     const std::string& filename)
 {
-    // Convert to absolute path
+    // ---------- Resolve Absolute Path ----------
     QString qfilename = QString::fromStdString(filename);
     QString absolutePath;
 
@@ -26,83 +27,82 @@ bool TransactionCSVLogger::saveTransaction(
         absolutePath = QCoreApplication::applicationDirPath() + "/" + qfilename;
     }
 
-    qDebug() << "[TransactionCSVLogger] Working directory:"
-             << QCoreApplication::applicationDirPath();
     qDebug() << "[TransactionCSVLogger] Absolute path:" << absolutePath;
 
-    // Ensure directory exists
+    // ---------- Ensure Directory Exists ----------
     QDir dir;
     QString dirPath = absolutePath.left(absolutePath.lastIndexOf('/'));
 
     if (!dir.exists(dirPath)) {
-        bool created = dir.mkpath(dirPath);
-        qDebug() << "[TransactionCSVLogger] Directory created:"
-                 << created << "Path:" << dirPath;
-        if (!created) {
-            qCritical() << "[TransactionCSVLogger] FAILED to create directory!";
+        if (!dir.mkpath(dirPath)) {
+            qCritical() << "[TransactionCSVLogger] Failed to create directory!";
             return false;
         }
     }
 
-    bool needsHeader = !fileExists(filename);
-    qDebug() << "[TransactionCSVLogger] File exists:" << !needsHeader;
+    // ---------- Header Logic (FIXED) ----------
+    bool needsHeader =
+        !fileExists(filename) || QFile(absolutePath).size() == 0;
 
+    // ---------- Open File ----------
     QFile file(absolutePath);
-
     if (!file.open(QIODevice::Append | QIODevice::Text)) {
-        qCritical() << "[TransactionCSVLogger] ERROR: Cannot open file!";
-        qCritical() << "[TransactionCSVLogger] Error:" << file.errorString();
+        qCritical() << "[TransactionCSVLogger] Cannot open file:"
+                    << file.errorString();
         return false;
     }
 
     QTextStream stream(&file);
 
-    // ---- HEADER ----
+    // ---------- HEADER ----------
     if (needsHeader) {
-        qDebug() << "[TransactionCSVLogger] Writing header...";
         stream
-            << "transaction_amount,"
-            << "transaction_type,"
-            << "account_balance,"
-            << "timestamp,"
-            << "hour,day,month,day_of_week,"
-            << "device_type,"
-            << "ip_address_flag,"
-            << "merchant_category,"
-            << "transaction_distance,"
-            << "authentication_method,"
-            << "daily_transaction_count,"
-            << "avg_transaction_amount_7d,"
-            << "failed_transaction_count_7d\n";
+            << "Transaction_ID,"
+            << "User_ID,"
+            << "Transaction_Amount,"
+            << "Transaction_Type,"
+            << "Account_Balance,"
+            << "Device_Type,"
+            << "Location,"
+            << "Merchant_Category,"
+            << "IP_Address_Flag,"
+            << "Daily_Transaction_Count,"
+            << "Avg_Transaction_Amount_7d,"
+            << "Failed_Transaction_Count_7d,"
+            << "Transaction_Distance,"
+            << "Authentication_Method,"
+            << "Hour,"
+            << "Day,"
+            << "Month,"
+            << "DayOfWeek,";
         stream.flush();
     }
 
-    // ---- DATA ROW ----
-    qDebug() << "[TransactionCSVLogger] Writing data row...";
+    // ---------- DATA ----------
     stream
+        << txn.transactionId() << ","
+        << txn.userId() << ","
         << txn.transactionAmount() << ","
         << txn.transactionType() << ","
         << txn.accountBalance() << ","
-        << txn.timestamp().toSecsSinceEpoch() << ","
+        << txn.deviceType() << ","
+        << txn.location() << ","
+        << txn.merchantCategory() << ","
+        << (txn.ipAddressFlag() ? 1 : 0) << ","
+        << txn.dailyTransactionCount() << ","
+        << txn.avgTransactionAmount7d() << ","
+        << txn.failedTransactionCount7d() << ","
+        << txn.transactionDistance() << ","
+        << txn.authenticationMethod() << ","
         << txn.hour() << ","
         << txn.day() << ","
         << txn.month() << ","
-        << txn.dayOfWeek() << ","
-        << txn.deviceType() << ","
-        << (txn.ipAddressFlag() ? 1 : 0) << ","
-        << txn.merchantCategory() << ","
-        << txn.transactionDistance() << ","
-        << txn.authenticationMethod() << ","
-        << txn.dailyTransactionCount() << ","
-        << txn.avgTransactionAmount7d() << ","
-        << txn.failedTransactionCount7d()
+        << txn.dayOfWeek()
         << "\n";
 
     stream.flush();
     file.close();
 
-    qDebug() << "[TransactionCSVLogger] SUCCESS! File saved to:" << absolutePath;
-    qDebug() << "[TransactionCSVLogger] File size:" << file.size() << "bytes";
-
+    qDebug() << "[TransactionCSVLogger] Transaction logged successfully";
     return true;
 }
