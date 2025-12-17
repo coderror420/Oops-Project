@@ -47,7 +47,7 @@ public:
     std::string currentMerchant;
     std::string currentCategory;
     int currentHourOfDay;
-    bool isWeekend;
+    // bool isWeekend;
 
     // === LAST 3 TRANSACTIONS (Historical Context) ===
     TransactionRecord lastTxn1;

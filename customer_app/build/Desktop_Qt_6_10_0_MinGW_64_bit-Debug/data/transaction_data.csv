@@ -1,0 +1,1 @@
+Transaction_ID,User_ID,Transaction_Amount,Transaction_Type,Account_Balance,Device_Type,Location,Merchant_Category,Previous_Fraudulent_Activity,Daily_Transaction_Count,Avg_Transaction_Amount_7d,Failed_Transaction_Count_7d,Transaction_Distance,Authentication_Method,Hour,Day,Month,DayOfWeek,TXN_1765990773,mannan,100,TRANSFER,10000,Laptop,Mumbai,Transfer,0,3,1200,0,5,OTP,22,17,12,3

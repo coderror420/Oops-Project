@@ -10,6 +10,7 @@
 #include "BiometricCSVLogger.h"
 #include "transaction.h"
 #include "transactioncsvlogger.h"
+#include <QProcess>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -131,7 +132,6 @@ void MainWindow::goNext(){
             snapshot.currentMerchant = recipientId.toStdString();
             snapshot.currentCategory = "Transfer";
             snapshot.currentHourOfDay = QTime::currentTime().hour();
-            snapshot.isWeekend = (QDate::currentDate().dayOfWeek() >= 6);
 
             snapshot.lastTxn1 = getLastTransaction(0);
             snapshot.lastTxn2 = getLastTransaction(1);
@@ -154,8 +154,9 @@ void MainWindow::goNext(){
                 10000.0,                                        // Account_Balance (mock)
                 "Laptop",                                       // Device_Type
                 "Mumbai",                                       //location
-                false,                                          // IP_Address_Flag
+
                 "Transfer",                                    // Merchant_Category
+                false,                                          //previousfraudulent
                 5.0,                                            // Transaction_Distance (km)
                 "OTP",                                          // Authentication_Method
                 3,                                              // Daily_Transaction_Count
@@ -164,6 +165,63 @@ void MainWindow::goNext(){
                 );
 
             TransactionCSVLogger::saveTransaction(txn);
+            // ================= PYTHON PREDICTION =================
+            QString pythonPath = "python"; // or full path
+            QString scriptPath = "predict.py";
+
+            QStringList args;
+            args << scriptPath
+                 << txn.transactionId()
+                 << txn.userId()
+                 << QString::number(txn.transactionAmount())
+                 << txn.transactionType()
+                 << QString::number(txn.accountBalance())
+                 << txn.deviceType()
+                 << txn.location()
+                 << txn.merchantCategory()
+                 << (txn.previousFraudulentActivity() ? "1" : "0")
+                 << QString::number(txn.dailyTransactionCount())
+                 << QString::number(txn.avgTransactionAmount7d())
+                 << QString::number(txn.failedTransactionCount7d())
+                 << QString::number(txn.transactionDistance())
+                 << txn.authenticationMethod()
+                 << QString::number(txn.hour())
+                 << QString::number(txn.day())
+                 << QString::number(txn.month())
+                 << QString::number(txn.dayOfWeek());
+
+            QProcess process;
+            process.start(pythonPath, args);
+            process.waitForFinished(-1);
+
+            QString output = process.readAllStandardOutput().trimmed();
+            bool ok;
+            double fraudProb = output.toDouble(&ok);
+
+            if(!ok) {
+                qWarning() << "[Python Prediction] Failed to parse probability:" << output;
+                fraudProb = 0.0;
+            }
+
+            // ================= UI RESULT =================
+            double threshold = 0.7; // configurable threshold for fraud
+            if(fraudProb >= threshold) {
+                ui->paymentSuccess->setText(
+                    QString("⚠️ TRANSACTION FLAGGED\n\nFraud Probability: %1%")
+                        .arg(fraudProb * 100, 0, 'f', 2)
+                    );
+                ui->paymentSuccess->setStyleSheet("color:red; font-weight:bold;");
+            } else {
+                ui->paymentSuccess->setText(
+                    QString("Payment successful!\n\nUser: %1\nAmount: %2\nReceiver: %3\nFraud Probability: %4% (Safe)")
+                        .arg(userId)
+                        .arg(amount)
+                        .arg(recipientId)
+                        .arg(fraudProb * 100, 0, 'f', 2)
+                    );
+                ui->paymentSuccess->setStyleSheet("color:white;");
+            }
+
 
             // ================= UI RESULT =================
             if(snapshot.isFlagged) {
@@ -221,4 +279,5 @@ void MainWindow::on_next_3_clicked()
     ui->next_3->setEnabled(false);
     ui->verify->setEnabled(true);
 }
+
 

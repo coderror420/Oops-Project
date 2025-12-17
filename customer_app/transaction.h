@@ -18,7 +18,8 @@ private:
     QString m_deviceType;
     QString m_merchantCategory;
     QString m_location;
-    bool m_ipAddressFlag;
+    // bool m_ipAddressFlag;
+    bool m_previousFraudulentActivity;
 
     int m_dailyTransactionCount;
     double m_avgTransactionAmount7d;
@@ -32,7 +33,6 @@ private:
     int m_day;
     int m_month;
     int m_dayOfWeek;
-    bool m_isWeekend;
 
 public:
     Transaction();
@@ -45,8 +45,8 @@ public:
                 double accountBalance,
                 const QString& deviceType,
                 const QString& location,
-                bool ipAddressFlag,
                 const QString& merchantCategory,
+                const bool& previousFraudulentActivity,
                 double transactionDistance,
                 const QString& authenticationMethod,
                 int dailyTransactionCount,
@@ -63,7 +63,8 @@ public:
     QString deviceType() const;
     QString location() const;
     QString merchantCategory() const;
-    bool ipAddressFlag() const;
+    bool previousFraudulentActivity() const;
+    // bool ipAddressFlag() const;
     int dailyTransactionCount() const;
     double avgTransactionAmount7d() const;
     int failedTransactionCount7d() const;
@@ -74,8 +75,6 @@ public:
     int day() const;
     int month() const;
     int dayOfWeek() const;
-    bool isWeekend() const;
-
     void deriveTimeFeatures();
 };
 

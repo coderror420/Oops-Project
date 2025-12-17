@@ -9,7 +9,6 @@ BiometricSnapshot::BiometricSnapshot()
     typingSpeed(0), backspaceRate(0), pauseCount(0),
     otpResponseTime(0), otpAttemptsCount(0), totalOtpsSent(0),
     currentAmount(0), currentMerchant(""), currentCategory(""),
-    currentHourOfDay(0), isWeekend(false),
     amountVsAvgLast3(0), timeSinceLastTxn(0), merchantSeenBefore(false),
     deviceId(""), isKnownDevice(true), geoDistanceKm(0),
     fraudScore(0), isFlagged(false), flagReason("") {}

@@ -3,12 +3,10 @@
 Transaction::Transaction()
     : m_transactionAmount(0.0),
     m_accountBalance(0.0),
-    m_ipAddressFlag(false),
     m_dailyTransactionCount(0),
     m_avgTransactionAmount7d(0.0),
     m_failedTransactionCount7d(0),
-    m_transactionDistance(0.0),
-    m_isWeekend(false)
+    m_transactionDistance(0.0)
 {
 }
 
@@ -20,8 +18,8 @@ Transaction::Transaction(const QString& transactionId,
                          double accountBalance,
                          const QString& deviceType,
                          const QString& location,
-                         bool ipAddressFlag,
                          const QString& merchantCategory,
+                         const bool& previousFraudulentActivity,
                          double transactionDistance,
                          const QString& authenticationMethod,
                          int dailyTransactionCount,
@@ -35,8 +33,9 @@ Transaction::Transaction(const QString& transactionId,
     m_accountBalance(accountBalance),
     m_deviceType(deviceType),
     m_location(location),
-    m_ipAddressFlag(ipAddressFlag),
+
     m_merchantCategory(merchantCategory),
+    m_previousFraudulentActivity(previousFraudulentActivity),
     m_transactionDistance(transactionDistance),
     m_authenticationMethod(authenticationMethod),
     m_dailyTransactionCount(dailyTransactionCount),
@@ -50,7 +49,6 @@ void Transaction::deriveTimeFeatures()
 {
     if (!m_timestamp.isValid()) {
         m_hour = m_day = m_month = m_dayOfWeek = 0;
-        m_isWeekend = false;
         return;
     }
 
@@ -58,7 +56,6 @@ void Transaction::deriveTimeFeatures()
     m_day = m_timestamp.date().day();
     m_month = m_timestamp.date().month();
     m_dayOfWeek = m_timestamp.date().dayOfWeek();
-    m_isWeekend = (m_dayOfWeek >= 6);
 }
 
 /* Getters */
@@ -71,7 +68,8 @@ double Transaction::accountBalance() const { return m_accountBalance; }
 QString Transaction::deviceType() const { return m_deviceType; }
 QString Transaction::location() const {return m_location;}
 QString Transaction::merchantCategory() const { return m_merchantCategory; }
-bool Transaction::ipAddressFlag() const { return m_ipAddressFlag; }
+// bool Transaction::ipAddressFlag() const { return m_ipAddressFlag; }
+bool Transaction::previousFraudulentActivity() const { return m_previousFraudulentActivity;}
 int Transaction::dailyTransactionCount() const { return m_dailyTransactionCount; }
 double Transaction::avgTransactionAmount7d() const { return m_avgTransactionAmount7d; }
 int Transaction::failedTransactionCount7d() const { return m_failedTransactionCount7d; }
@@ -81,4 +79,3 @@ int Transaction::hour() const { return m_hour; }
 int Transaction::day() const { return m_day; }
 int Transaction::month() const { return m_month; }
 int Transaction::dayOfWeek() const { return m_dayOfWeek; }
-bool Transaction::isWeekend() const { return m_isWeekend; }
