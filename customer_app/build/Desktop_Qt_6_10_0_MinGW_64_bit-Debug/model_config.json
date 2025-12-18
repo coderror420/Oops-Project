@@ -1,0 +1,95 @@
+{
+  "feature_names": [
+    "Transaction_Amount",
+    "Account_Balance",
+    "Daily_Transaction_Count",
+    "Avg_Transaction_Amount_7d",
+    "Failed_Transaction_Count_7d",
+    "Transaction_Distance",
+    "Hour",
+    "Day",
+    "Month",
+    "DayOfWeek",
+    "Transaction_Type",
+    "Device_Type",
+    "Location",
+    "Merchant_Category",
+    "Authentication_Method"
+  ],
+  "categorical_columns": [
+    "Transaction_Type",
+    "Device_Type",
+    "Location",
+    "Merchant_Category",
+    "Authentication_Method"
+  ],
+  "scaler_mean": [
+    99.31193600000002,
+    1.5098,
+    50228.561790750005,
+    1.0002,
+    2.00675,
+    2.0009,
+    0.0997,
+    7.484225,
+    254.6387685,
+    2.00305,
+    2498.1651019999995,
+    1.495725,
+    11.504975,
+    15.72935,
+    6.529175,
+    3.0178
+  ],
+  "scaler_std": [
+    98.51521912154946,
+    1.1183264103114081,
+    28771.129087514964,
+    0.8168230897813797,
+    1.4202128141584978,
+    1.4169859526473791,
+    0.29959958277674553,
+    4.035771444144849,
+    141.3520643465224,
+    1.4156944223595713,
+    1441.0040532237772,
+    1.1194336623377912,
+    6.902338389949815,
+    8.822247365467598,
+    3.446940501281535,
+    2.0023069594844842
+  ],
+  "label_encoders": {
+    "Transaction_Type": {
+      "ATM Withdrawal": 0,
+      "Bank Transfer": 1,
+      "Online": 2,
+      "POS": 3
+    },
+    "Device_Type": {
+      "Laptop": 0,
+      "Mobile": 1,
+      "Tablet": 2
+    },
+    "Location": {
+      "London": 0,
+      "Mumbai": 1,
+      "New York": 2,
+      "Sydney": 3,
+      "Tokyo": 4
+    },
+    "Merchant_Category": {
+      "Clothing": 0,
+      "Electronics": 1,
+      "Groceries": 2,
+      "Restaurants": 3,
+      "Travel": 4
+    },
+    "Authentication_Method": {
+      "Biometric": 0,
+      "OTP": 1,
+      "PIN": 2,
+      "Password": 3
+    }
+  }
+}
