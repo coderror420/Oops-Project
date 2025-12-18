@@ -2,7 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QElapsedTimer>
+#include <QTableWidget> // Required for passing table widgets
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -18,16 +18,13 @@ public:
 
 private slots:
     void on_pushButton_clicked();
-    void on_generateOtp_clicked();
-    void on_submitOtp_clicked();
+    void on_comboBox_currentIndexChanged(int index);
 
 private:
     Ui::MainWindow *ui;
 
-    //To add
-    //Member variables (not global)
-    QElapsedTimer otpTimer;
-    bool isTimerActive;
+    // Helper function to handle CSV reading and table population
+    void populateTableFromCSV(const QString &filePath, QTableWidget *tableWidget, bool filterFlaggedOnly);
 };
 
 #endif // MAINWINDOW_H
