@@ -1,0 +1,6 @@
+debug.log
+*.log
+
+*.dist
+.dist/
+dist/
