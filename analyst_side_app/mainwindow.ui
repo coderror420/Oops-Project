@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>793</width>
-    <height>832</height>
+    <width>797</width>
+    <height>695</height>
    </rect>
   </property>
   <property name="palette">
@@ -174,24 +174,11 @@
         <string>Suspscious transactions</string>
        </property>
       </widget>
-      <widget class="QCheckBox" name="checkBox_3">
-       <property name="geometry">
-        <rect>
-         <x>240</x>
-         <y>180</y>
-         <width>121</width>
-         <height>21</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>AI Insights</string>
-       </property>
-      </widget>
       <widget class="QCheckBox" name="checkBox_4">
        <property name="geometry">
         <rect>
          <x>240</x>
-         <y>200</y>
+         <y>180</y>
          <width>121</width>
          <height>21</height>
         </rect>
@@ -410,26 +397,13 @@
        <string>Suspicious Data</string>
       </property>
      </widget>
-     <widget class="QLabel" name="label_6">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>440</y>
-        <width>91</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>AI Insights</string>
-      </property>
-     </widget>
      <widget class="QFrame" name="frame_5">
       <property name="geometry">
        <rect>
         <x>0</x>
-        <y>590</y>
+        <y>460</y>
         <width>771</width>
-        <height>181</height>
+        <height>211</height>
        </rect>
       </property>
       <property name="frameShape">
@@ -444,42 +418,26 @@
          <x>10</x>
          <y>10</y>
          <width>361</width>
-         <height>161</height>
+         <height>191</height>
         </rect>
        </property>
       </widget>
       <widget class="QGraphicsView" name="graphicsView_2">
        <property name="geometry">
         <rect>
-         <x>380</x>
+         <x>390</x>
          <y>10</y>
-         <width>381</width>
-         <height>161</height>
+         <width>371</width>
+         <height>191</height>
         </rect>
        </property>
       </widget>
-     </widget>
-     <widget class="QFrame" name="frame_4">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>460</y>
-        <width>771</width>
-        <height>101</height>
-       </rect>
-      </property>
-      <property name="frameShape">
-       <enum>QFrame::Shape::StyledPanel</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Shadow::Raised</enum>
-      </property>
      </widget>
      <widget class="QLabel" name="label_7">
       <property name="geometry">
        <rect>
         <x>0</x>
-        <y>570</y>
+        <y>440</y>
         <width>91</width>
         <height>16</height>
        </rect>
@@ -492,8 +450,6 @@
      <zorder>frame_3</zorder>
      <zorder>label_4</zorder>
      <zorder>label_5</zorder>
-     <zorder>label_6</zorder>
-     <zorder>frame_4</zorder>
      <zorder>label_7</zorder>
      <zorder>frame_5</zorder>
     </widget>
@@ -504,7 +460,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>793</width>
+     <width>797</width>
      <height>25</height>
     </rect>
    </property>

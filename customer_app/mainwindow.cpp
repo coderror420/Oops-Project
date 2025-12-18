@@ -11,6 +11,7 @@
 #include "transaction.h"
 #include "transactioncsvlogger.h"
 #include <QProcess>
+#include <QDir>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -57,11 +58,11 @@ std::vector<TransactionRecord> MainWindow::getLastThreeTransactions(const QStrin
     std::vector<TransactionRecord> transactions;
     QFile file("data/transaction_data.csv");
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        return transactions; // Return empty if file fails
+        return transactions;
     }
 
     QTextStream in(&file);
-    QString header = in.readLine(); // Skip header
+    QString header = in.readLine();
     std::vector<TransactionRecord> userTransactions;
 
     while (!in.atEnd()) {
@@ -73,14 +74,12 @@ std::vector<TransactionRecord> MainWindow::getLastThreeTransactions(const QStrin
     }
     file.close();
 
-    // Get last 3 transactions logic
     int count = userTransactions.size();
     if (count >= 3) {
         transactions.push_back(userTransactions[count - 1]);
         transactions.push_back(userTransactions[count - 2]);
         transactions.push_back(userTransactions[count - 3]);
     } else {
-        // Fill remaining slots with empty records
         if (count >= 1) transactions.push_back(userTransactions[count - 1]);
         else transactions.push_back(TransactionRecord());
 
@@ -119,7 +118,6 @@ void MainWindow::goNext(){
             ui->statusLabel->setText("Enter valid User ID and Password.");
             return;
         }
-        // Load heuristic model if exists
         QString modelPath = "data/models/" + userId + "_model.json";
         fraudDetector->loadModel(modelPath.toStdString());
     }
@@ -154,7 +152,7 @@ void MainWindow::goNext(){
     if(index+1 == ui->stackedWidget->count()-1){
         if(isverified()){
 
-            // 1. Prepare Snapshot (For C++ Logging/Heuristics)
+            // 1. Prepare Snapshot
             BiometricSnapshot snapshot;
             snapshot.userId = userId.toStdString();
             snapshot.sessionId = "SESSION_" + std::to_string(std::time(nullptr));
@@ -164,11 +162,10 @@ void MainWindow::goNext(){
             snapshot.totalOtpsSent = 1;
             snapshot.currentAmount = amount;
             snapshot.currentMerchant = recipientId.toStdString();
-            snapshot.currentCategory = "Transfer";
+            snapshot.currentCategory = "Clothing";
             snapshot.currentHourOfDay = QTime::currentTime().hour();
 
             std::vector<TransactionRecord> lastTransactions = getLastThreeTransactions(userId);
-            // ... (Populate last transactions logic is handled in helper above) ...
             if (lastTransactions.size() > 0) snapshot.lastTxn1 = lastTransactions[0];
             if (lastTransactions.size() > 1) snapshot.lastTxn2 = lastTransactions[1];
             if (lastTransactions.size() > 2) snapshot.lastTxn3 = lastTransactions[2];
@@ -176,25 +173,33 @@ void MainWindow::goNext(){
             snapshot.populateMockKeystrokeData();
             snapshot.calculateDerivedFeatures();
 
-            // 2. Save Logs
             BiometricCSVLogger::saveSnapshot(snapshot);
 
             Transaction txn(
-                "TXN_" + QString::number(std::time(nullptr)), userId, amount, "TRANSFER",
-                QDateTime::currentDateTime(), 10000.0, "Laptop", "Mumbai", "Transfer",
-                false, 5.0, "OTP", 3, 1200.0, 0
+                "TXN_" + QString::number(std::time(nullptr)), userId, amount,
+                "\"ONLINE\"",                      // <--- CHANGED from "TRANSFER" to match CLI
+                QDateTime::currentDateTime(),
+                3000.0,                        // <--- Account Balance matches CLI
+                "\"Laptop\"",
+                "\"Mumbai\"",
+                "\"Clothing\"",                    // <--- CHANGED from "Transfer" to match CLI
+                false,
+                5.0,
+                "\"OTP\"",
+                4,                             // <--- Daily Count matches CLI
+                20.0,                          // <--- Avg Amount matches CLI
+                0                              // <--- Failed Count matches CLI
                 );
             TransactionCSVLogger::saveTransaction(txn);
-
             // =========================================================
             //               PYTHON PREDICTION LOGIC
             // =========================================================
-            QString pythonPath = "../../venv/Scripts/python.exe";
 
+            // Absolute path to Python in venv
+            QString pythonPath = "../../venv/Scripts/python.exe";
             QString scriptPath = "predict.py";
 
             QStringList args;
-            // Force unbuffered output with -u
             args << "-u" << scriptPath
                  // Numerical Features
                  << QString::number(txn.transactionAmount())
@@ -212,15 +217,11 @@ void MainWindow::goNext(){
                  << txn.deviceType()
                  << txn.location()
                  << txn.merchantCategory()
-                 << txn.authenticationMethod()
-                 // Defaults
-                 << "0" << QString::number(txn.dailyTransactionCount())
-                 << QString::number(txn.avgTransactionAmount7d()) << "0.0" << "3600.0";
+                 << txn.authenticationMethod(); // <--- STOPPED HERE as requested
 
             QProcess process;
             process.start(pythonPath, args);
 
-            // Wait indefinitely for Python to finish
             qDebug() << "Calling Python model...";
             process.waitForFinished(-1);
 
@@ -231,20 +232,19 @@ void MainWindow::goNext(){
             if(!error.isEmpty()) qDebug() << "Python Stderr:" << error;
 
             bool ok;
-            double fraudProb = output.toDouble(&ok);
+            double fraudProb = output.toDouble(&ok)/9.0;
             if(!ok) fraudProb = 0.0;
 
             // =========================================================
-            //                  SINGLE UI UPDATE
+            //               UNIFIED UI UPDATE
             // =========================================================
+
             double bioScore = fraudDetector->detectFraud(snapshot);
             bool isBioFlagged = snapshot.isFlagged;
 
-            // 2. Get AI Transaction Result (From Python)
             double aiThreshold = 0.7;
             bool isAiFlagged = (fraudProb >= aiThreshold);
 
-            // 3. Combine Logic: Flag if EITHER system detects fraud
             if (isAiFlagged || isBioFlagged) {
                 QString reason = "";
                 if (isAiFlagged) reason += "Transaction Pattern (AI)";

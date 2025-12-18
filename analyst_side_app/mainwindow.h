@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QGraphicsView>
 #include <QTableWidget> // Required for passing table widgets
 
 QT_BEGIN_NAMESPACE
@@ -22,6 +23,7 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+    void loadGraphInView(const QString &filePath, QGraphicsView *view);
 
     // Helper function to handle CSV reading and table population
     void populateTableFromCSV(const QString &filePath, QTableWidget *tableWidget, bool filterFlaggedOnly);
